@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from django.contrib.auth import authenticate
-from .models import User
+from .models import User,Profile
 from rest_framework import serializers
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -40,3 +40,12 @@ class LoginSerializer(serializers.Serializer):
         data["user"] = user
         return data           
        
+       
+class LogoutSerializer(serializers.Serializer):
+    refresh=serializers.CharField()       
+    
+class ProfileSerializer(serializers.Serializer):
+        class Meta:
+            model=Profile,
+            fields=["user","university","semester","description","field","daily_goal","profile_picture"]
+            
