@@ -44,8 +44,19 @@ class LoginSerializer(serializers.Serializer):
 class LogoutSerializer(serializers.Serializer):
     refresh=serializers.CharField()       
     
-class ProfileSerializer(serializers.Serializer):
+class ProfileSerializer(serializers.ModelSerializer):   
         class Meta:
-            model=Profile,
-            fields=["user","university","semester","description","field","daily_goal","profile_picture"]
-            
+            model=Profile
+            fields=["user","university","semester","description","field","daily_study_goal","profile_picture"]
+            read_only_fields=["user"]
+        # def create(self,validated_data):
+        #         profile=Profile(
+        #             university=validated_data["university"],
+        #             semester=validated_data["semester"],
+        #             field=validated_data["field"],
+        #             description=validated_data["description"],
+        #             daily_study_goal=validated_data['daily_study_goal'],   
+        #             profile_picture=validated_data["profile_picture"],
+        #         ) 
+        #         profile.save()
+        #         return profile

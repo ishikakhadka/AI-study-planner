@@ -95,8 +95,9 @@ class LogoutView(APIView):
                 
 
 class ProfileView(viewsets.ViewSet):
-    serializer_class=ProfileSerializer,
+    serializer_class=ProfileSerializer
     permission_classes=[permissions.IsAuthenticated]
+    queryset=Profile.objects.all()
     
     @action(detail=False, methods=['post'], url_path='login_user')
     def get_auth_user(self,request):
@@ -108,4 +109,19 @@ class ProfileView(viewsets.ViewSet):
             "email":user.email
             }
         )
+    def create(self, request):
+    
+      serializer = self.serializer_class(data=request.data)
+
+      if serializer.is_valid():
+        serializer.save(user=request.user)
+
+        return Response(
+            {
+                "message": "Profile created successfully",
+                "data": serializer.data
+            }
+        )
+
+      return Response(serializer.errors, status=400)     
     
