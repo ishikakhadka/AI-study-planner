@@ -1,0 +1,14 @@
+/* body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+button {
+  background-color: var(--color-primary);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+}
+
+button:hover {
+  background-color: var(--color-primary-hover);
+} */
