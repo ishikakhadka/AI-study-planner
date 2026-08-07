@@ -2,7 +2,6 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-container">
-        {/* Brand */}
         <div className="footer-brand">
           <h2 className="footer-logo">
             Study<span className="pilot">Pilot</span>
@@ -31,20 +30,10 @@ const Footer = () => {
           <a href="#">Help Center</a>
           <a href="#">FAQs</a>
         </div>
-
-        {/* <div className="footer-social">
-          <h4>Connect</h4>
-
-          <div className="social-icons">
-            <Github />
-            <Linkedin />
-            <Mail />
-          </div>
-        </div> */}
       </div>
 
       <div className="footer-bottom">
-        © 2026 StudyPilot. All rights reserved.
+        © 2026 Ishika Khadka. All rights reserved.
       </div>
     </footer>
   );
