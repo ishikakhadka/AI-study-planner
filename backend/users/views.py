@@ -20,7 +20,7 @@ class RegisterView(APIView):
         try:
             email=request.data.get("email")
             if User.objects.filter(email=email).exists():
-                raise ValidationError('{email:User with given email already exists.}')
+                raise ValidationError({ "email": ["User with given email already exists."] })
             serializer=self.serializer_class(data=request.data)
             if (serializer.is_valid()):
                 serializer.save()
@@ -104,7 +104,7 @@ class ProfileView(viewsets.ViewSet):
         user=request.user
         return Response(
            { 
-            "message":"logged in user details!!",
+            "message":"Logged in user details!!",
             "username":user.username,
             "email":user.email
             }

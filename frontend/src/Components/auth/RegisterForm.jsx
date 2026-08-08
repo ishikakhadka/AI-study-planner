@@ -1,8 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
+import { useNavigate } from "react-router";
+import axiosInstance from "../../lib/axios.instance";
 
 const RegisterSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -10,6 +13,29 @@ const RegisterSchema = z.object({
   password: z.string().min(1, "Username is required"),
 });
 export default function RegisterForm() {
+  const navigate = useNavigate();
+  const { isPending, mutate } = useMutation({
+    mutationKey: ["Register-form"],
+    mutationFn: async (values) => {
+      return await axiosInstance.post("/register/", values);
+    },
+    onSuccess: (res) => {
+      toast.success("Registered Successfully");
+      navigate("/login");
+    },
+    onError: (error) => {
+      console.log("Backend error:", error.response?.data);
+
+      const data = error.response?.data;
+
+      if (data) {
+        const firstError = Object.values(data).flat()[0];
+        toast.error(firstError || "Registration failed");
+      } else {
+        toast.error(error.message || "Registration failed");
+      }
+    },
+  });
   const {
     register,
     handleSubmit,
@@ -22,13 +48,12 @@ export default function RegisterForm() {
       email: "",
     },
   });
-  const onSubmit = (data) => {
-    console.log("registered data", data);
-    toast.success("Registered!");
-  };
+
   return (
     <div className="login-container">
-      <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="login-form"
+        onSubmit={handleSubmit((values) => mutate(values))}>
         <h2>Register</h2>
 
         <div className="form-group">
@@ -64,8 +89,8 @@ export default function RegisterForm() {
           )}
         </div>
 
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Submitting..." : "Register"}
+        <button type="submit" disabled={isPending}>
+          {isPending ? "Submitting..." : "Register"}
         </button>
       </form>
     </div>

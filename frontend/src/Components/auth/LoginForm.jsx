@@ -2,7 +2,10 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useMutation } from "@tanstack/react-query";
+import axiosInstance from "../../lib/axios.instance";
+import toast from "react-hot-toast";
 
 const LoginSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -10,6 +13,7 @@ const LoginSchema = z.object({
 });
 
 export default function LoginForm() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -22,13 +26,35 @@ export default function LoginForm() {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log("Validated Form Data:", data);
-  };
+  const { isPending, mutate } = useMutation({
+    mutationKey: ["Login-form"],
+    mutationFn: async (values) => {
+      return await axiosInstance.post("/login/", values);
+    },
+    onSuccess: (res) => {
+      const accessToken = res.data.accessToken;
+      toast.success("Login Successful!");
+      navigate("/");
+    },
+    onError: (error) => {
+      console.log("Backend error:", error.response?.data);
+
+      const data = error.response?.data;
+
+      if (data) {
+        const firstError = Object.values(data).flat()[0];
+        toast.error(firstError || "Login failed");
+      } else {
+        toast.error(error.message || "Login failed");
+      }
+    },
+  });
 
   return (
     <div className="login-container">
-      <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="login-form"
+        onSubmit={handleSubmit((values) => mutate(values))}>
         <h2>Login</h2>
 
         <div className="form-group">
@@ -55,8 +81,8 @@ export default function LoginForm() {
           )}
         </div>
 
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Submitting..." : "Login"}
+        <button type="submit" disabled={isPending}>
+          {isPending ? "Submitting..." : "Login"}
         </button>
         <Link to="/register">
           <p
