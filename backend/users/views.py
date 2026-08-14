@@ -49,7 +49,7 @@ class LoginView(APIView):
             return Response(
                 {
                     "message": "Login successful",
-                    "access": str(access),
+                    "accessToken": str(access),
                     "refresh": str(refresh),
                     "username": user.username,
                     "email": user.email,
@@ -110,7 +110,7 @@ class ProfileView(viewsets.ViewSet):
             }
         )
     def create(self, request):
-    
+       
       serializer = self.serializer_class(data=request.data)
 
       if serializer.is_valid():

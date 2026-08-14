@@ -1,12 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useNavigate, Link } from "react-router";
 import { NAV_ELEMENTS } from "../../lib/constants";
+import toast from "react-hot-toast";
+import ProfileIcon from "./ProfileIcon";
 
 const NavBar = () => {
-  const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
+  const logOut = () => {
+    localStorage.clear();
+    toast.success("Logged out successfully.");
+    navigate("/login");
+  };
 
+  const [open, setOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    const loggedUser = localStorage.getItem("user");
+    if (accessToken) {
+      setIsAuthenticated(true);
+    }
+    if (loggedUser) {
+      setUser(loggedUser);
+    }
+  }, [navigate]);
   return (
     <div className="nav">
       <nav className="navbar-links">
@@ -28,15 +47,21 @@ const NavBar = () => {
               {item.label}
             </Link>
           ))}
-
-          <button
-            className="login-btn"
-            onClick={() => {
-              navigate("/login");
-              setOpen(false);
-            }}>
-            Login
-          </button>
+          {!isAuthenticated ? (
+            <button
+              className="login-btn"
+              onClick={() => {
+                navigate("/login");
+                setOpen(false);
+              }}>
+              Login
+            </button>
+          ) : (
+            // <button className="login-btn" onClick={logOut}>
+            //   Logout
+            // </button>
+            <ProfileIcon username={user} />
+          )}
         </div>
 
         <button className="menu-btn" onClick={() => setOpen(!open)}>

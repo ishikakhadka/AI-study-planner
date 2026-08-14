@@ -1,5 +1,5 @@
 export const NAV_ELEMENTS = [
-  { label: "Home", href: "/" },
+  { label: "Home", href: "/dashboard" },
   { label: "Study Portal", href: "/study-portal" },
   { label: "About", href: "/about" },
   { label: "Contact Us", href: "/contact" },
@@ -58,3 +58,24 @@ export const CARD_ELEMENTS = [
       "StudyPilot continuously updates your study plan as your progress changes.",
   },
 ];
+
+export const COLORS = [
+  "#6366F1",
+  "#EC4899",
+  "#14B8A6",
+  "#F59E0B",
+  "#EF4444",
+  "#8B5CF6",
+  "#06B6D4",
+];
+
+export const motivationalQuotes = {
+  Monday: "Start before you feel ready. Progress begins with one step.",
+  Tuesday:
+    "You don’t need to do everything today. Just do the next right thing.",
+  Wednesday: "Halfway there. Keep going — your future self is counting on you.",
+  Thursday: "Small efforts repeated every day become extraordinary results.",
+  Friday: "You showed up all week. Finish strong.",
+  Saturday: "Learn something today that makes tomorrow a little easier.",
+  Sunday: "Rest, reflect, reset. A new week is waiting for you.",
+};

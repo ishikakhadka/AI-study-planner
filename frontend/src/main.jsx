@@ -5,6 +5,7 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router";
 import { Toaster } from "react-hot-toast";
 import ReactQueryClientProvider from "../provider/ReactQueryClientProvider.jsx";
+import NavBar from "./Components/common/NavBar.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

@@ -33,8 +33,11 @@ export default function LoginForm() {
     },
     onSuccess: (res) => {
       const accessToken = res.data.accessToken;
+      localStorage.setItem("accessToken", accessToken);
+      const user = res.data.username;
+      localStorage.setItem("user", user);
       toast.success("Login Successful!");
-      navigate("/");
+      navigate("/dashboard");
     },
     onError: (error) => {
       console.log("Backend error:", error.response?.data);
