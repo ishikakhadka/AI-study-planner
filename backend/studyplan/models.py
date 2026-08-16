@@ -59,16 +59,17 @@ class StudyPlan(models.Model):
         return self.title
 
 class Task(models.Model):
-    study_plan=models.ForeignKey(related_name=StudyPlan,on_delete=models.CASCADE,related_name=tasks)
-    date=models.DateTimeField()
-    start_time=models.DateTimeField()
-    end_time=models.DateTimeField()
+    study_plan=models.ForeignKey(StudyPlan,on_delete=models.CASCADE,related_name="tasks")
+    date=models.DateField()
+    start_time=models.TimeField()
+    end_time=models.TimeField()
     description=models.CharField(max_length=255,blank=True,null=True)
     title = models.CharField(
         max_length=200
     )
-    status=models.CharField(max_length=20,choices=TaskStatus.CHOICES,default=TaskStatus.IN_PROGRESS)
-    priority=models.CharField(max_length=20,choices=TaskPriority.CHOICES,default=TaskPriority.HIGH)
+    subject=models.CharField(max_length=200,blank=True,null=True)
+    status=models.CharField(max_length=20,choices=TaskStatus.choices,default=TaskStatus.IN_PROGRESS)
+    priority=models.CharField(max_length=20,choices=TaskPriority.choices,default=TaskPriority.HIGH)
     created_at = models.DateTimeField(
         auto_now_add=True
     )
