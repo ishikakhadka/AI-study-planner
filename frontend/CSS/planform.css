@@ -1,0 +1,231 @@
+.plan-form-container {
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  box-sizing: border-box;
+}
+
+.plan-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.tasks {
+  margin-bottom: 15px;
+}
+.form-header {
+  margin-bottom: 4px;
+}
+
+.form-header h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #d4af37;
+}
+
+.form-header p {
+  margin: 7px 0 0;
+  color: #e0e0e0;
+  font-size: 14px;
+}
+.task-header {
+  margin: 7px 0 0;
+  color: #0460e2;
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+.icon-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.task-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.task-icon {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 8px;
+
+  background: rgba(45, 42, 192);
+  color: white;
+
+  cursor: pointer;
+
+  padding: 0;
+}
+
+.task-icon:hover {
+  background: rgba(7, 176, 223);
+  color: white;
+}
+
+.task-icon:last-child:hover {
+  background: rgba(255, 113, 133, 0.15);
+  color: #ff7185;
+}
+
+/* FORM CARD */
+
+.form-section {
+  padding: 28px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+}
+
+.form-section h3 {
+  margin: 0 0 24px;
+  font-size: 19px;
+}
+
+/* FORM GROUP */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* INPUTS */
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 13px;
+
+  border: 1px solid #dbe2ea;
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #1e293b;
+
+  font-size: 14px;
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* TWO COLUMN ROW */
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+/* STUDY GOAL */
+
+.goal-input {
+  position: relative;
+}
+
+.goal-input input {
+  padding-right: 85px;
+}
+
+.goal-input span {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  color: #64748b;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+/* ERROR */
+
+.error {
+  margin: 0;
+  color: #dc2626;
+  font-size: 12px;
+}
+
+/* BUTTON */
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.form-actions button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+
+  background: #4f46e5;
+  color: white;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.form-actions button:hover {
+  background: #4338ca;
+}
+
+.form-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 650px) {
+  .plan-form-container {
+    padding: 20px 12px;
+  }
+
+  .form-section {
+    padding: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}

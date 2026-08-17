@@ -1,6 +1,9 @@
 import { BookOpenText, CheckCheck, Clock } from "lucide-react";
 import "../../../../CSS/createplan.css";
+import { useNavigate } from "react-router";
 const CreatePlan = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="create-plan">
       <div className="create-plan-content">
@@ -17,7 +20,13 @@ const CreatePlan = () => {
           goals, subjects, and available time.
         </p>
 
-        <button className="create-plan-btn">+ Create Study Plan</button>
+        <button
+          className="create-plan-btn"
+          onClick={() => {
+            navigate("/study-plan/create");
+          }}>
+          + Create Study Plan
+        </button>
       </div>
 
       <div className="create-plan-visual">

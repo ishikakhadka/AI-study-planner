@@ -6,11 +6,26 @@ from rest_framework import permissions, viewsets
 from .serializer import StudyPlanSerializer
 from .models import StudyPlan
 from studyplan.models import Task
+from users.models import User
 
 class StudyPlanView(viewsets.ViewSet):
     serializer_class=StudyPlanSerializer
     permission_classes=[permissions.IsAuthenticated]
     queryset=StudyPlan.objects.all()
+    
+    def list(self, request):
+        try:
+          study_plans = StudyPlan.objects.filter(user=request.user)
+
+          serializer = StudyPlanSerializer(study_plans, many=True)
+
+          return Response({
+            "message": "Study plans fetched successfully",
+            "data": serializer.data,
+        })
+
+        except Exception as e:
+           raise APIException(f"Error fetching study plans: {e}")  
     
     def create(self,request):
         try:
@@ -28,7 +43,6 @@ class StudyPlanView(viewsets.ViewSet):
         except Exception as e:
             raise APIException(f"Error creating study plan:{e}")
         
-  
    
     def retrieve(self,request,pk=None):
          try:

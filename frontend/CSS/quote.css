@@ -5,7 +5,9 @@
   align-items: center;
   gap: 18px;
 
-  width: 100%;
+  width: fit-content;
+  max-width: 100%;
+  align-self: flex-start;
   box-sizing: border-box;
 
   padding: 24px 28px;
@@ -32,6 +34,7 @@
   overflow: hidden;
 }
 
+/* Decorative glow */
 .quote::before {
   content: "";
 
@@ -52,13 +55,13 @@
   pointer-events: none;
 }
 
+/* Icon */
 .quote-icon {
   position: relative;
   z-index: 1;
 
   width: 44px;
   height: 44px;
-
   min-width: 44px;
 
   display: flex;
@@ -78,26 +81,31 @@
     0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* Quote content */
 .quote-content {
   position: relative;
   z-index: 1;
 
   min-width: 0;
+  width: max-content;
+  max-width: 100%;
 }
 
+/* Label */
 .quote-label {
   display: block;
 
   margin-bottom: 6px;
 
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 700;
 
   letter-spacing: 1.5px;
 
-  color: rgba(186, 230, 253, 0.75);
+  color: #48e355;
 }
 
+/* Quote text */
 .quote h5 {
   margin: 0;
 
@@ -106,10 +114,14 @@
 
   font-weight: 500;
 
-  color: rgba(255, 255, 255, 0.95);
+  color: #ec74be;
 
   overflow-wrap: break-word;
 }
+
+/* =========================
+   TABLET / MOBILE
+========================= */
 
 @media (max-width: 768px) {
   .quote {
@@ -136,8 +148,14 @@
   .quote h5 {
     font-size: 15px;
     line-height: 1.45;
+
+    color: #d31c8d;
   }
 }
+
+/* =========================
+   SMALL MOBILE
+========================= */
 
 @media (max-width: 480px) {
   .quote {
@@ -148,12 +166,13 @@
     margin: 16px 0;
 
     border-radius: 16px;
+
+    max-width: calc(100vw - 32px);
   }
 
   .quote-icon {
     width: 36px;
     height: 36px;
-
     min-width: 36px;
 
     border-radius: 10px;
@@ -187,16 +206,21 @@
   }
 }
 
+/* =========================
+   VERY SMALL MOBILE
+========================= */
+
 @media (max-width: 360px) {
   .quote {
     padding: 15px;
     gap: 10px;
+
+    max-width: calc(100vw - 24px);
   }
 
   .quote-icon {
     width: 32px;
     height: 32px;
-
     min-width: 32px;
   }
 

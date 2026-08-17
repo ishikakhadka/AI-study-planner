@@ -5,6 +5,7 @@ import Homepage from "./pages/Homepage";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Layout from "../Layout";
+import StudyPlan from "./pages/StudyPlan";
 
 function App() {
   return (
@@ -12,10 +13,11 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Homepage />} />
 
         <Route element={<Layout />}>
-          <Route path="/" element={<Homepage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/study-plan/create" element={<StudyPlan />} />
         </Route>
       </Routes>
     </>
