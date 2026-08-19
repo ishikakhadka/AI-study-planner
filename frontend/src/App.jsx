@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Layout from "../Layout";
 import StudyPlan from "./pages/StudyPlan";
+import StudyIndex from "./pages/StudyIndex";
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/study-plan/create" element={<StudyPlan />} />
+          <Route path="/study-plan/:id/" element={<StudyPlan />} />{" "}
+          <Route path="/study-plan/" element={<StudyIndex />} />
         </Route>
       </Routes>
     </>

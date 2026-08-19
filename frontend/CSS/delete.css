@@ -1,0 +1,175 @@
+/* =========================
+   DELETE MODAL
+========================= */
+
+.delete-modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease;
+}
+
+.delete-modal {
+  position: relative;
+
+  width: 400px;
+  max-width: calc(100% - 40px);
+
+  background: #ffffff;
+  border-radius: 18px;
+
+  padding: 32px;
+
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.18),
+    0 8px 20px rgba(0, 0, 0, 0.08);
+
+  text-align: center;
+
+  animation: modalIn 0.2s ease;
+}
+
+/* Close button */
+
+.modal-close {
+  position: absolute;
+
+  top: 16px;
+  right: 16px;
+
+  width: 34px;
+  height: 34px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f1f5f9;
+  color: #64748b;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.modal-close:hover {
+  color: #f71212;
+}
+
+.delete-icon {
+  width: 58px;
+  height: 58px;
+
+  margin: 0 auto 18px;
+
+  border-radius: 50%;
+
+  background: #fee2e2;
+  color: #ef4444;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Heading */
+
+.delete-modal h2 {
+  margin: 0 0 10px;
+
+  font-size: 21px;
+  font-weight: 650;
+
+  color: #bd5025;
+}
+
+/* Description */
+
+.delete-modal p {
+  margin: 0 auto 26px;
+
+  max-width: 320px;
+
+  font-size: 14px;
+  line-height: 1.6;
+
+  color: #64748b;
+}
+
+/* Buttons */
+
+.delete-modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.delete-modal-actions button {
+  flex: 1;
+
+  height: 44px;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.modal-cancel {
+  border: 1px solid #e2e8f0;
+
+  background: #ffffff;
+  color: #475569;
+}
+
+.modal-cancel:hover {
+  background: #f8fafc;
+  color: #f8fafc;
+}
+
+.modal-delete {
+  border: none;
+  background: #ef6144;
+  color: white;
+}
+
+.modal-delete:hover {
+  background: #1ebe7e;
+}
+
+.modal-delete:disabled,
+.modal-cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

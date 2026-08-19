@@ -109,19 +109,15 @@ class ProfileView(viewsets.ViewSet):
             "email":user.email
             }
         )
-    def create(self, request):
-       
+    def create(self, request):     
       serializer = self.serializer_class(data=request.data)
-
       if serializer.is_valid():
         serializer.save(user=request.user)
-
         return Response(
             {
                 "message": "Profile created successfully",
                 "data": serializer.data
             }
         )
-
       return Response(serializer.errors, status=400)     
     

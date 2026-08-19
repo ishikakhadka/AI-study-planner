@@ -9,8 +9,8 @@ import toast from "react-hot-toast";
 
 const ACTIVE = "ACTIVE";
 
-export default function PlanForm() {
-  const { isPEnding, mutate } = useMutation({
+export default function PlanForm(props) {
+  const { isPending, mutate } = useMutation({
     mutationKey: ["study-plan"],
     mutationFn: async (values) => {
       return await axiosInstance.post("/study_plan/", values);
@@ -29,6 +29,7 @@ export default function PlanForm() {
       }
     },
   });
+
   const {
     register,
     handleSubmit,
@@ -43,7 +44,6 @@ export default function PlanForm() {
       end_date: "",
       daily_study_goal: 0,
       status: ACTIVE,
-
       tasks: [
         {
           date: "",
@@ -58,6 +58,7 @@ export default function PlanForm() {
       ],
     },
   });
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "tasks",

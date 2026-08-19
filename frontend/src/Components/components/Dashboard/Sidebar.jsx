@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { NavLink } from "react-router";
+
 import {
   Menu,
   X,
@@ -20,6 +22,9 @@ const Sidebar = () => {
   const closeMenu = () => {
     setOpen(false);
   };
+
+  const getLinkClass = ({ isActive }) =>
+    `sidebar-link ${isActive ? "active" : ""}`;
 
   return (
     <>
@@ -60,37 +65,40 @@ const Sidebar = () => {
         <nav className="sidebar-nav">
           <p className="sidebar-section-title">MENU</p>
 
-          <a href="#" className="sidebar-link active" onClick={closeMenu}>
+          <NavLink to="/dashboard" className={getLinkClass} onClick={closeMenu}>
             <LayoutDashboard size={19} />
             <span>Dashboard</span>
-          </a>
+          </NavLink>
 
-          <a href="#" className="sidebar-link" onClick={closeMenu}>
+          <NavLink
+            to="/study-plan"
+            className={getLinkClass}
+            onClick={closeMenu}>
             <CalendarDays size={19} />
             <span>Study Plans</span>
-          </a>
+          </NavLink>
 
-          <a href="#" className="sidebar-link" onClick={closeMenu}>
+          <NavLink to="/tasks" className={getLinkClass} onClick={closeMenu}>
             <CheckSquare size={19} />
             <span>Tasks</span>
-          </a>
+          </NavLink>
 
-          <a href="#" className="sidebar-link" onClick={closeMenu}>
+          <NavLink to="/friends" className={getLinkClass} onClick={closeMenu}>
             <Users size={19} />
             <span>Friends</span>
-          </a>
+          </NavLink>
 
           <p className="sidebar-section-title sidebar-section-space">ACCOUNT</p>
 
-          <a href="#" className="sidebar-link" onClick={closeMenu}>
+          <NavLink to="/profile" className={getLinkClass} onClick={closeMenu}>
             <User size={19} />
             <span>Profile</span>
-          </a>
+          </NavLink>
 
-          <a href="#" className="sidebar-link" onClick={closeMenu}>
+          <NavLink to="/settings" className={getLinkClass} onClick={closeMenu}>
             <Settings size={19} />
             <span>Settings</span>
-          </a>
+          </NavLink>
         </nav>
 
         <div className="sidebar-bottom">
