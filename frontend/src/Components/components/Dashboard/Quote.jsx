@@ -16,7 +16,7 @@ const Quote = () => {
       </div>
 
       <div className="quote-content">
-        <span className="quote-label">DAILY MOTIVATION</span>
+        <span className="quote-label">Daily Motivation</span>
         <h5>{quote}</h5>
       </div>
     </div>

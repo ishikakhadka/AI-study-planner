@@ -61,7 +61,7 @@ class StudyPlanView(viewsets.ViewSet):
             study_plan=self.queryset.get(pk=pk)
             
             
-            serializer=self.serializer_class(study_plan,data=request.data,partial=True)
+            serializer=self.serializer_class(study_plan,data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response({

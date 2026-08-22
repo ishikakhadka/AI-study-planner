@@ -97,11 +97,8 @@
 
   margin-bottom: 6px;
 
-  font-size: 14px;
-  font-weight: 700;
-
-  letter-spacing: 1.5px;
-
+  font-size: 16px;
+  font-weight: 500;
   color: #48e355;
 }
 
@@ -109,13 +106,9 @@
 .quote h5 {
   margin: 0;
 
-  font-size: 16px;
-  line-height: 1.5;
-
+  font-size: 15px;
   font-weight: 500;
-
   color: #ec74be;
-
   overflow-wrap: break-word;
 }
 

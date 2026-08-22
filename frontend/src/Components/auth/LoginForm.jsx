@@ -14,10 +14,11 @@ const LoginSchema = z.object({
 
 export default function LoginForm() {
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -28,17 +29,21 @@ export default function LoginForm() {
 
   const { isPending, mutate } = useMutation({
     mutationKey: ["Login-form"],
+
     mutationFn: async (values) => {
       return await axiosInstance.post("/login/", values);
     },
+
     onSuccess: (res) => {
       const accessToken = res.data.accessToken;
+
       localStorage.setItem("accessToken", accessToken);
-      const user = res.data.username;
-      localStorage.setItem("user", user);
+      localStorage.setItem("user", res.data.username);
+
       toast.success("Login Successful!");
       navigate("/dashboard");
     },
+
     onError: (error) => {
       console.log("Backend error:", error.response?.data);
 
@@ -54,39 +59,46 @@ export default function LoginForm() {
   });
 
   return (
-    <div className="login-container">
-      <form
-        className="login-form"
-        onSubmit={handleSubmit((values) => mutate(values))}>
-        <h2>Login</h2>
+    <form
+      className="login-form"
+      onSubmit={handleSubmit((values) => mutate(values))}>
+      <div className="login-form-header">
+        <h2>Welcome back</h2>
 
-        <div className="form-group">
-          <label>Username</label>
-          <input
-            type="text"
-            placeholder="Enter username"
-            {...register("username")}
-          />
-          {errors.username && (
-            <p className="error">{errors.username.message}</p>
-          )}
-        </div>
+        <p>Sign in to continue your StudyPilot journey.</p>
+      </div>
 
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password"
-            placeholder="Enter password"
-            {...register("password")}
-          />
-          {errors.password && (
-            <p className="error">{errors.password.message}</p>
-          )}
-        </div>
+      <div className="form-group">
+        <label htmlFor="username">Username</label>
 
-        <button type="submit" disabled={isPending}>
-          {isPending ? "Submitting..." : "Login"}
-        </button>
+        <input
+          id="username"
+          type="text"
+          placeholder="Enter your username"
+          {...register("username")}
+        />
+
+        {errors.username && <p className="error">{errors.username.message}</p>}
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="password">Password</label>
+
+        <input
+          id="password"
+          type="password"
+          placeholder="Enter your password"
+          {...register("password")}
+        />
+
+        {errors.password && <p className="error">{errors.password.message}</p>}
+      </div>
+
+      <button type="submit" className="login-submit" disabled={isPending}>
+        {isPending ? "Signing in..." : "Sign in"}
+      </button>
+
+      <div className="register-link">
         <Link to="/register">
           <p
             style={{
@@ -99,7 +111,7 @@ export default function LoginForm() {
             Don't have an account? Register Now.
           </p>
         </Link>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 }

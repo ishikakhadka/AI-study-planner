@@ -24,8 +24,7 @@ class TaskSerializer(serializers.ModelSerializer):
         ]
 
         read_only_fields = [
-            "id",
-            "created_at",
+           "created_at",
             "updated_at",
             "study_plan"
         ]
@@ -66,24 +65,44 @@ class StudyPlanSerializer(serializers.ModelSerializer):
         study_plan=StudyPlan.objects.create(**validated_data)
         for task in tasks:
             Task.objects.create(study_plan=study_plan,**task)
-        return study_plan  
-    def update(self,instance,validated_data):
-        task=validated_data.pop("tasks",[])
-        for field,value in validated_data.items():
-            setattr(instance,field,value)
-        instance.save()    
-        for task in task:
-            task_id=task.get("id")
-            if task_id:
-                task_db=instance.tasks.get(id=task_id)
-                for field,value in task:
-                    if field!=id:
-                       setattr(task_db,field,value)
-                task.save()
-            else:
-                instance.tasks.create(**task)
+        return study_plan 
+    
+     
+    def update(self, instance, validated_data):
+        tasks_data = validated_data.pop("tasks", [])
 
-        return instance    
+        for field, value in validated_data.items():
+           setattr(instance, field, value)
+
+        instance.save()
+
+        submitted_task_ids = {
+        task.get("id")
+        for task in tasks_data
+        if task.get("id")
+    }
+
+        instance.tasks.exclude(
+        id__in=submitted_task_ids
+    ).delete()
+
+        for task_data in tasks_data:
+
+           task_id = task_data.get("id")
+
+           if task_id:
+              task_db = instance.tasks.get(id=task_id)
+
+              for field, value in task_data.items():
+                 if field != "id":
+                    setattr(task_db, field, value)
+
+              task_db.save()
+
+           else:
+              instance.tasks.create(**task_data)
+
+        return instance  
    
         
             

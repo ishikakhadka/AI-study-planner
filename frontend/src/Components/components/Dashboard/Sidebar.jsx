@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 
 import {
   Menu,
@@ -15,14 +15,19 @@ import {
 } from "lucide-react";
 
 import "../../../../CSS/dashboard.css";
+import toast from "react-hot-toast";
 
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
-
+  const navigate = useNavigate();
   const closeMenu = () => {
     setOpen(false);
   };
-
+  const logOut = () => {
+    localStorage.clear();
+    toast.success("Logged out successfully.");
+    navigate("/login");
+  };
   const getLinkClass = ({ isActive }) =>
     `sidebar-link ${isActive ? "active" : ""}`;
 
@@ -102,7 +107,7 @@ const Sidebar = () => {
         </nav>
 
         <div className="sidebar-bottom">
-          <button className="sidebar-link logout">
+          <button className="sidebar-link logout" onClick={logOut}>
             <LogOut size={19} />
             <span>Logout</span>
           </button>

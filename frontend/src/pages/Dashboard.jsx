@@ -32,10 +32,10 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="dashboard-content">
+    <div>
       <div className="dashboard-header">
         <div className="dashboard-text">
-          <p className="dashboard-label">YOUR DASHBOARD</p>
+          {/* <p className="dashboard-label">YOUR DASHBOARD</p> */}
 
           <h1>Welcome back, {capitalize(userName)}!</h1>
 

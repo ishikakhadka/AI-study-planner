@@ -1,42 +1,32 @@
+import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlanSchema } from "../../../schema/PlanSchema";
 import "../../../CSS/planform.css";
 import TaskForm from "./TaskForm";
-import { useMutation } from "@tanstack/react-query";
+
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../lib/axios.instance";
 import toast from "react-hot-toast";
+import { useParams, useNavigate } from "react-router";
 
 const ACTIVE = "ACTIVE";
 
-export default function PlanForm(props) {
-  const { isPending, mutate } = useMutation({
-    mutationKey: ["study-plan"],
-    mutationFn: async (values) => {
-      return await axiosInstance.post("/study_plan/", values);
-    },
-    onSuccess: (res) => {
-      toast.success("Study Plan created successfully.");
-    },
-    onError: (error) => {
-      const data = error.response?.data;
+export default function PlanForm() {
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-      if (data) {
-        const firstError = Object.values(data).flat()[0];
-        toast.error(firstError || "Login failed");
-      } else {
-        toast.error(error.message || "Login failed");
-      }
-    },
-  });
+  const isEdit = Boolean(id);
 
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    reset,
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(PlanSchema),
+
     defaultValues: {
       title: "",
       description: "",
@@ -44,6 +34,7 @@ export default function PlanForm(props) {
       end_date: "",
       daily_study_goal: 0,
       status: ACTIVE,
+
       tasks: [
         {
           date: "",
@@ -59,34 +50,174 @@ export default function PlanForm(props) {
     },
   });
 
+  const {
+    data: editData,
+    isPending: isFetching,
+    isError: isFetchError,
+  } = useQuery({
+    queryKey: ["edit-plan", id],
+
+    queryFn: async () => {
+      const response = await axiosInstance.get(`/study_plan/${id}/`);
+
+      return response.data;
+    },
+    enabled: isEdit,
+  });
+
+  const plans = editData?.data;
+
+  const { mutate, isPending: isSaving } = useMutation({
+    mutationFn: async (values) => {
+      if (isEdit) {
+        const response = await axiosInstance.put(`/study_plan/${id}/`, values);
+        return response.data;
+      }
+
+      const response = await axiosInstance.post("/study_plan/", values);
+
+      return response.data;
+    },
+
+    onSuccess: () => {
+      toast.success(
+        isEdit
+          ? "Study Plan updated successfully."
+          : "Study Plan created successfully.",
+      );
+
+      navigate("/study-plan");
+    },
+
+    onError: (error) => {
+      console.log("API ERROR:", error.response?.data);
+
+      const data = error.response?.data;
+
+      if (data) {
+        const firstError = Object.values(data).flat()[0];
+
+        toast.error(firstError || "Something went wrong.");
+      } else {
+        toast.error(error.message || "Something went wrong.");
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (!plans) {
+      return;
+    }
+
+    reset({
+      title: plans.title || "",
+
+      description: plans.description || "",
+
+      start_date: plans.start_date || "",
+
+      end_date: plans.end_date || "",
+
+      daily_study_goal: plans.daily_study_goal || 0,
+
+      status: plans.status || ACTIVE,
+
+      tasks:
+        plans.tasks?.length > 0
+          ? plans.tasks
+          : [
+              {
+                date: "",
+                title: "",
+                description: "",
+                subject: "",
+                start_time: "",
+                end_time: "",
+                status: "PENDING",
+                priority: "HIGH",
+              },
+            ],
+    });
+  }, [plans, reset]);
+
+  // --------------------------------
+  // TASK FIELD ARRAY
+  // --------------------------------
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "tasks",
   });
 
-  const onSubmit = (data) => {
-    console.log("SUBMITTED:", data);
+  const addTask = () => {
+    append({
+      date: "",
+      title: "",
+      description: "",
+      subject: "",
+      start_time: "",
+      end_time: "",
+      status: "PENDING",
+      priority: "HIGH",
+    });
+  };
+
+  const deleteTask = (index) => {
+    if (!isEdit) {
+      if (index !== 0) {
+        remove(index);
+      }
+    } else {
+      remove(index);
+    }
+  };
+
+  const onSubmit = (values) => {
+    console.log("SUBMITTED VALUES:", values);
+
+    mutate(values);
   };
 
   const onError = (errors) => {
     console.log("VALIDATION ERRORS:", errors);
   };
 
+  if (isEdit && isFetching) {
+    return (
+      <div className="plan-form-container">
+        <div className="form-loading">Loading study plan...</div>
+      </div>
+    );
+  }
+
+  if (isEdit && isFetchError) {
+    return (
+      <div className="plan-form-container">
+        <div className="form-error">Failed to load study plan.</div>
+      </div>
+    );
+  }
+
+  // --------------------------------
+  // FORM
+  // --------------------------------
+
   return (
     <div className="plan-form-container">
-      <form
-        className="plan-form"
-        onSubmit={handleSubmit((values) => mutate(values))}>
-        {/* Header */}
+      <form className="plan-form" onSubmit={handleSubmit(onSubmit, onError)}>
         <div className="form-header">
-          <h2>Create Study Plan</h2>
-          <p>Set your goals and create a plan for your studies.</p>
+          <h2>{isEdit ? "Edit Study Plan" : "Create Study Plan"}</h2>
+
+          <p>
+            {isEdit
+              ? "Update your study plan."
+              : "Set your goals and create a plan for your studies."}
+          </p>
         </div>
 
-        {/* Plan Details */}
         <div className="form-section">
           <h3>Plan Details</h3>
-          {/* Title */}
+
           <div className="form-group">
             <label htmlFor="title">Title</label>
 
@@ -99,7 +230,7 @@ export default function PlanForm(props) {
 
             {errors.title && <p className="error">{errors.title.message}</p>}
           </div>
-          {/* Description */}
+
           <div className="form-group">
             <label htmlFor="description">Description</label>
 
@@ -114,7 +245,7 @@ export default function PlanForm(props) {
               <p className="error">{errors.description.message}</p>
             )}
           </div>
-          {/* Dates */}
+
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="start_date">Start Date</label>
@@ -136,6 +267,7 @@ export default function PlanForm(props) {
               )}
             </div>
           </div>
+
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="daily_study_goal">Daily Study Goal</label>
@@ -165,7 +297,9 @@ export default function PlanForm(props) {
 
               <select id="status" {...register("status")}>
                 <option value="ACTIVE">Active</option>
+
                 <option value="COMPLETED">Completed</option>
+
                 <option value="PAUSED">Paused</option>
               </select>
 
@@ -174,36 +308,29 @@ export default function PlanForm(props) {
               )}
             </div>
           </div>
+
           {fields.map((field, index) => (
             <TaskForm
               key={field.id}
               index={index}
               register={register}
               errors={errors}
-              onAdd={() =>
-                append({
-                  description: "",
-                  date: "",
-                  title: "",
-                  subject: "",
-                  start_time: "",
-                  end_time: "",
-                  status: "PENDING",
-                  priority: "HIGH",
-                })
-              }
-              onDelete={() => {
-                if (index != 0) {
-                  remove(index);
-                }
-              }}
+              onAdd={addTask}
+              onDelete={() => deleteTask(index)}
+              edit={isEdit}
             />
-          ))}{" "}
+          ))}
         </div>
 
         <div className="form-actions">
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Creating..." : "Create Study Plan"}
+          <button type="submit" disabled={isSaving}>
+            {isSaving
+              ? isEdit
+                ? "Updating..."
+                : "Creating..."
+              : isEdit
+                ? "Update Study Plan"
+                : "Create Study Plan"}
           </button>
         </div>
       </form>
