@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axiosInstance from "../lib/axios.instance";
 import "../../CSS/task.css";
+import toast from "react-hot-toast";
 
 const Tasks = () => {
   const [checkedTasks, setCheckedTasks] = useState([]);
@@ -23,6 +24,22 @@ const Tasks = () => {
       });
 
       return response.data;
+    },
+    onSuccess: () => {
+      toast.success("Task updated successfully!");
+    },
+    onError: (error) => {
+      console.log("API ERROR:", error.response?.data);
+
+      const data = error.response?.data;
+
+      if (data) {
+        const firstError = Object.values(data).flat()[0];
+
+        toast.error(firstError || "Something went wrong.");
+      } else {
+        toast.error(error.message || "Something went wrong.");
+      }
     },
   });
 
@@ -67,7 +84,12 @@ const Tasks = () => {
                       <label className="task-item" key={task.id}>
                         <input
                           type="checkbox"
-                          checked={checkedTasks.includes(task.id)}
+                          checked={
+                            task.status.toLowerCase().replace(/\s+/g, "-") ==
+                            "completed"
+                              ? true
+                              : checkedTasks.includes(task.id)
+                          }
                           onChange={() => handleCheck(task.id)}
                         />
 

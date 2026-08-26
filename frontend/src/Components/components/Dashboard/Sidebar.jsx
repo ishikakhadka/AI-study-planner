@@ -12,6 +12,7 @@ import {
   Settings,
   LogOut,
   Sparkles,
+  SquarePlay,
 } from "lucide-react";
 
 import "../../../../CSS/dashboard.css";
@@ -33,7 +34,6 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Mobile Header */}
       <div className="sidebar-mobile-header">
         <div className="sidebar-mobile-logo">
           <div className="logo-icon">
@@ -88,9 +88,9 @@ const Sidebar = () => {
             <span>Tasks</span>
           </NavLink>
 
-          <NavLink to="/friends" className={getLinkClass} onClick={closeMenu}>
-            <Users size={19} />
-            <span>Friends</span>
+          <NavLink to="/resources" className={getLinkClass} onClick={closeMenu}>
+            <SquarePlay size={19} />
+            <span>Resources</span>
           </NavLink>
 
           <p className="sidebar-section-title sidebar-section-space">ACCOUNT</p>
