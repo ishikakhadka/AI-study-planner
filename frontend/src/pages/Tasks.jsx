@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axiosInstance from "../lib/axios.instance";
 import "../../CSS/task.css";
 
@@ -10,6 +10,18 @@ const Tasks = () => {
     queryKey: ["task-list"],
     queryFn: async () => {
       const response = await axiosInstance.get("/study_plan/");
+      return response.data;
+    },
+  });
+
+  const update = useMutation({
+    mutationKey: ["update-task"],
+
+    mutationFn: async () => {
+      const response = await axiosInstance.patch("/task/complete/", {
+        task_ids: checkedTasks,
+      });
+
       return response.data;
     },
   });
@@ -27,7 +39,7 @@ const Tasks = () => {
   };
 
   const handleUpdate = () => {
-    console.log("Tasks selected for update:", checkedTasks);
+    update.mutate();
   };
 
   if (isPending) {

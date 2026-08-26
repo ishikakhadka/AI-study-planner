@@ -4,14 +4,14 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
-from rest_framework import permissions, viewsets
+from rest_framework import permissions, status, viewsets
 from .serializer import StudyPlanSerializer
 from .models import StudyPlan
 from studyplan.models import Task
 from users.models import User
 from studyplan.serializer import TaskSerializer
 
-class StudyPlanView(viewsets.ModelViewSet):
+class StudyPlanView(viewsets.ViewSet):
     serializer_class=StudyPlanSerializer
     permission_classes=[permissions.IsAuthenticated]
     queryset=StudyPlan.objects.all()
@@ -100,31 +100,42 @@ class StudyPlanView(viewsets.ModelViewSet):
         )
           
 
+class TaskView(viewsets.ModelViewSet):
+
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
+
     @action(
-            details=True,
-            action=["patch"],
-            url="/tasks/complete"
-                )
-    def complete_task(self,request,pk=None):
-        study_plan=self.get_object();
-        task_ids=request.data.get("checkedTasks",[])
+        detail=False,
+        methods=["patch"],
+        url_path="complete"
+    )
+    def complete_tasks(self, request):
+
+        task_ids = request.data.get("task_ids", [])
+
         if not task_ids:
-            return Response({'message':"No tasks selected"},status=status.HTTP_400_BAD_REQUEST)
-        tasks=study_plan.tasks.filter(id__in=task_ids)
-        tasks.update(status="COMPLETED")     
+            return Response(
+                {"message": "No tasks selected"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        tasks = Task.objects.filter(
+            id__in=task_ids
+        )
+
+        tasks.update(status="COMPLETED")
+
         return Response(
             {
-                "message": "Tasks updated successfully.",
+                "message": "Tasks completed successfully",
                 "updated_task_ids": list(
                     tasks.values_list("id", flat=True)
                 )
             },
             status=status.HTTP_200_OK
-        )   
-
-        
-    
-   
-        
+        )  
+               
         
               
