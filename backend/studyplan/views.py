@@ -2,13 +2,16 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
 from rest_framework import permissions, viewsets
 from .serializer import StudyPlanSerializer
 from .models import StudyPlan
 from studyplan.models import Task
 from users.models import User
+from studyplan.serializer import TaskSerializer
 
-class StudyPlanView(viewsets.ViewSet):
+class StudyPlanView(viewsets.ModelViewSet):
     serializer_class=StudyPlanSerializer
     permission_classes=[permissions.IsAuthenticated]
     queryset=StudyPlan.objects.all()
@@ -95,3 +98,33 @@ class StudyPlanView(viewsets.ViewSet):
           raise APIException(
             f"Error deleting study plan: {e}"
         )
+          
+
+    @action(
+            details=True,
+            action=["patch"],
+            url="/tasks/complete"
+                )
+    def complete_task(self,request,pk=None):
+        study_plan=self.get_object();
+        task_ids=request.data.get("checkedTasks",[])
+        if not task_ids:
+            return Response({'message':"No tasks selected"},status=status.HTTP_400_BAD_REQUEST)
+        tasks=study_plan.tasks.filter(id__in=task_ids)
+        tasks.update(status="COMPLETED")     
+        return Response(
+            {
+                "message": "Tasks updated successfully.",
+                "updated_task_ids": list(
+                    tasks.values_list("id", flat=True)
+                )
+            },
+            status=status.HTTP_200_OK
+        )   
+
+        
+    
+   
+        
+        
+              

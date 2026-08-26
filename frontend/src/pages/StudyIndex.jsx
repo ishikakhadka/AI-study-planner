@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import "../../CSS/studyindex.css";
 import axiosInstance from "../lib/axios.instance";
-import { SquarePen, Trash } from "lucide-react";
+import { NotebookPen, SquarePen, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import DeleteDialog from "../Components/components/DeleteDialog";
 import { useState } from "react";
@@ -44,8 +44,6 @@ const StudyIndex = () => {
 
   return (
     <>
-      <NotebookPen />
-      <h4>Study Plans</h4>
       <div className="task-table-container">
         <table className="task-table">
           <thead>

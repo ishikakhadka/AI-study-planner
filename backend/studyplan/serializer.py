@@ -28,6 +28,8 @@ class TaskSerializer(serializers.ModelSerializer):
             "updated_at",
             "study_plan"
         ]
+        
+        
 
 
 class StudyPlanSerializer(serializers.ModelSerializer):

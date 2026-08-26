@@ -3,7 +3,7 @@ import PlanForm from "../Components/auth/PlanForm";
 
 const StudyPlan = () => {
   return (
-    <div className="dashboard-content">
+    <div className="">
       <PlanForm />
     </div>
   );
