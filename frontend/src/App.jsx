@@ -9,6 +9,7 @@ import StudyPlan from "./pages/StudyPlan";
 import StudyIndex from "./pages/StudyIndex";
 import Tasks from "./pages/Tasks";
 import Resources from "./pages/Resources";
+import AddResources from "./pages/AddResource";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/study-plan/" element={<StudyIndex />} />
           <Route path="/tasks/" element={<Tasks />} />
           <Route path="/resources/" element={<Resources />} />
+          <Route path="/resources-create" element={<AddResources />} />
         </Route>
       </Routes>
     </>

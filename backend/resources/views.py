@@ -6,10 +6,28 @@ from rest_framework import viewsets
 
 from .models import Resources
 from resources.serializer import ResourceSerializer
+from resources.models import FileVisibility
 class ResourceViewSet(viewsets.ModelViewSet):
     queryset=Resources.objects.all()
     permission_classes=[IsAuthenticated]
     serializer_class=ResourceSerializer
+    
+    def list(self,request):
+        try:
+            resources=Resources.objects.filter(user=request.user)
+            user_data=ResourceSerializer(resources)
+            public_resource=Resources.objects.filter(file_visibility=FileVisibility.PUBLIC ).exclude(user=request.user   )
+            public_data=ResourceSerializer(public_resource)
+            return Response({
+                "message":"Resources fetched successfully",
+                "data":[
+                    user_data.data,public_data.data
+                ]
+            })
+        except Exception as e:
+             raise APIException(f"Error fetching resources: {e}")  
+
+                
     
     def create(self,request):
         try:

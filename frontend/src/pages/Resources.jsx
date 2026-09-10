@@ -1,7 +1,9 @@
 import { FileCode, Plus, Search } from "lucide-react";
 import "../../CSS/resource.css";
+import { useNavigate } from "react-router";
 
 const Resources = () => {
+  const navigate = useNavigate();
   return (
     <div className="resources-container">
       <div className="resources-header">
@@ -16,7 +18,11 @@ const Resources = () => {
           </div>
         </div>
 
-        <button className="add-resource-button">
+        <button
+          className="add-resource-button"
+          onClick={() => {
+            navigate("/resources-create");
+          }}>
           <Plus size={18} />
           Add Resource
         </button>
@@ -41,7 +47,11 @@ const Resources = () => {
           everything organized in one place.
         </p>
 
-        <button className="empty-resource-button">
+        <button
+          className="empty-resource-button"
+          onClick={() => {
+            navigate("/resources-create");
+          }}>
           <Plus size={17} />
           Add your first resource
         </button>
