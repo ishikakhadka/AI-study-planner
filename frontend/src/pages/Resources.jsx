@@ -1,8 +1,37 @@
 import { FileCode, Plus, Search } from "lucide-react";
 import "../../CSS/resource.css";
 import { useNavigate } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const Resources = () => {
+  const { isPending, isError, data } = useQuery({
+    queryKey: ["resource-index"],
+    queryFn: async (values) => {
+      const response = await axiosInstance.get(`/resources/`);
+
+      return response.data;
+    },
+    onError: (error) => {
+      const data = error.response?.data;
+
+      if (data) {
+        const firstError = Object.values(data).flat()[0];
+        toast.error(firstError || "Failed to fetch study plans");
+      } else {
+        toast.error(error.message || "Failed to fetch study plans");
+      }
+    },
+  });
+
+  if (isPending) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Failed to load study plans.</p>;
+  }
+
   const navigate = useNavigate();
   return (
     <div className="resources-container">

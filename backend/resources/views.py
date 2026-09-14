@@ -15,15 +15,16 @@ class ResourceViewSet(viewsets.ModelViewSet):
     def list(self,request):
         try:
             resources=Resources.objects.filter(user=request.user)
-            user_data=ResourceSerializer(resources)
+            user_data=ResourceSerializer(resources,many=True)
             public_resource=Resources.objects.filter(file_visibility=FileVisibility.PUBLIC ).exclude(user=request.user   )
-            public_data=ResourceSerializer(public_resource)
+            public_data=ResourceSerializer(public_resource,many=True)
             return Response({
-                "message":"Resources fetched successfully",
-                "data":[
-                    user_data.data,public_data.data
-                ]
-            })
+              "message": "Resources fetched successfully",
+               "data": {
+        "user_data": user_data.data,
+        "public_data": public_data.data
+    }
+})
         except Exception as e:
              raise APIException(f"Error fetching resources: {e}")  
 
