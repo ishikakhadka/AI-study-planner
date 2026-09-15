@@ -4,12 +4,14 @@ import axiosInstance from "../../lib/axios.instance";
 import toast from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
+import { allowedExtensions } from "../../lib/constants";
 
 const ResourceForm = () => {
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
@@ -21,7 +23,11 @@ const ResourceForm = () => {
     },
   });
   const navigate = useNavigate();
-
+  const acceptedFileTypes = {
+    DOCUMENT: ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv",
+    IMAGE: ".jpg,.jpeg,.png,.gif,.webp,.svg,.bmp,.tiff",
+    VIDEO: ".mp4,.webm,.ogg,.mov,.avi,.mkv",
+  };
   const { isPending, mutate } = useMutation({
     mutationKey: ["resources"],
 
@@ -62,7 +68,7 @@ const ResourceForm = () => {
     console.log("Submiited data:", formData);
     mutate(formData);
   };
-
+  const selectedFileType = watch("file_type");
   return (
     <div className="plan-form-container">
       <form className="plan-form" onSubmit={handleSubmit(onSubmit)}>
@@ -167,8 +173,26 @@ const ResourceForm = () => {
             <input
               id="file"
               type="file"
+              accept={acceptedFileTypes[selectedFileType]}
               {...register("file", {
                 required: "Please select a file",
+                validate: (files) => {
+                  const file = files?.[0];
+
+                  if (!file) {
+                    return "File is required";
+                  }
+
+                  const extension = file.name.split(".").pop().toLowerCase();
+
+                  const validExtensions = allowedExtensions[selectedFileType];
+
+                  if (!validExtensions?.includes(extension)) {
+                    return `Invalid file. Please select a ${selectedFileType.toLowerCase()} file.`;
+                  }
+
+                  return true;
+                },
               })}
             />
 

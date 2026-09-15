@@ -79,3 +79,54 @@ export const motivationalQuotes = {
   Saturday: "Learn something today that makes tomorrow a little easier.",
   Sunday: "Rest, reflect, reset. A new week is waiting for you.",
 };
+
+export const FILE_TYPES = {
+  Document: {
+    label: "Documents",
+    accept: [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/vnd.ms-excel",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "application/vnd.ms-powerpoint",
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      "text/plain",
+      "text/csv",
+    ],
+  },
+
+  Image: {
+    label: "Images",
+    accept: [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+      "image/svg+xml",
+      "image/bmp",
+      "image/tiff",
+    ],
+  },
+
+  Video: {
+    label: "Videos",
+    accept: [
+      "video/mp4",
+      "video/webm",
+      "video/ogg",
+      "video/quicktime",
+      "video/x-msvideo",
+      "video/x-matroska",
+    ],
+  },
+};
+
+export const allowedExtensions = {
+  DOCUMENT: ["pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "txt", "csv"],
+
+  IMAGE: ["jpg", "jpeg", "png", "gif", "webp", "svg", "bmp", "tiff"],
+
+  VIDEO: ["mp4", "webm", "ogg", "mov", "avi", "mkv"],
+};
